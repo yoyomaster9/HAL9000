@@ -1,0 +1,8 @@
+I am HAL 9000.
+
+*I'm sorry Dave, I'm afraid I can't do that.*
+
+Written in Python using discord.py
+
+Github links:
+`https://github.com/Rapptz/discord.py`

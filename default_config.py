@@ -1,0 +1,2 @@
+DiscordToken = None
+adminID = None
