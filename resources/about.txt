@@ -6,3 +6,4 @@ Written in Python using discord.py
 
 Github links:
 `https://github.com/Rapptz/discord.py`
+`https://github.com/yoyomaster9/HAL9000`
