@@ -21,7 +21,6 @@ async def on_message(message):
 
 @bot.event
 async def on_ready():
-    await bot.change_presence(activity=discord.Game(name='Mathnasium@Home'))
     print('Logged in as ' + bot.user.name)
     print('---------------------')
     for g in bot.guilds:
