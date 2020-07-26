@@ -4,7 +4,7 @@ import config
 import cogs
 import random
 
-BOT_PREFIX = ('.')
+BOT_PREFIX = '.'
 
 bot = commands.Bot(command_prefix=BOT_PREFIX)
 for x in commands.Cog.__subclasses__():
