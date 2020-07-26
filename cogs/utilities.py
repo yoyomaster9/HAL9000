@@ -37,3 +37,8 @@ class Utilties(commands.Cog):
             response = json.loads(response)
             msg = 'Ethereum Price: ${:.2f}'.format(response['ETH']['USD'])
         await ctx.send(msg)
+
+
+    @commands.Cog.listener()
+    async def on_command_error(self, ctx, error):
+        await ctx.send('I\'m sorry {}, I\'m afraid I can\'t do that.'.format(ctx.author.mention))
