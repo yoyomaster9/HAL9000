@@ -1,5 +1,6 @@
 from discord.ext import commands
 import config
+import json, aiohttp
 
 class Utilties(commands.Cog):
     def __init__(self, bot):
@@ -26,3 +27,13 @@ class Utilties(commands.Cog):
         with open('resources/about.txt', 'r') as file:
             s = ''.join(file.readlines())
             await ctx.send(s)
+
+    @commands.command()
+    async def eth(self, ctx):
+        url = 'https://min-api.cryptocompare.com/data/pricemulti?fsyms=ETH&tsyms=USD&api_key=' + str(config.EthereumAPIKey)
+        async with aiohttp.ClientSession() as session:
+            raw_response = await session.get(url)
+            response = await raw_response.text()
+            response = json.loads(response)
+            msg = 'Ethereum Price: ${:.2f}'.format(response['ETH']['USD'])
+        await ctx.send(msg)
