@@ -28,7 +28,7 @@ class Utilties(commands.Cog):
             s = ''.join(file.readlines())
             await ctx.send(s)
 
-    @commands.command(description = 'Returns current price of ETH in USD'
+    @commands.command(description = 'Returns current price of ETH in USD',
                     brief = 'Returns current price of ETH in USD'
     )
     async def eth(self, ctx):
