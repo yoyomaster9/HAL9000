@@ -2,6 +2,7 @@ import discord
 from discord.ext import commands
 import config
 import cogs
+import random
 
 BOT_PREFIX = ('.')
 
@@ -14,6 +15,9 @@ async def on_message(message):
     # We do not want the bot to reply to itself
     if message.author == bot.user:
         return
+
+    if message.content[0] == BOT_PREFIX and random.random() < .01:
+        await message.channel.send('I\'m sorry {}, I\'m afraid I can\'t do that.'.format(message.author.mention))
 
     # Otherwise process command
     else:
