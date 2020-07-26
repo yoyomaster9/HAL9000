@@ -28,7 +28,9 @@ class Utilties(commands.Cog):
             s = ''.join(file.readlines())
             await ctx.send(s)
 
-    @commands.command()
+    @commands.command(description = 'Returns current price of ETH in USD'
+                    brief = 'Returns current price of ETH in USD'
+    )
     async def eth(self, ctx):
         url = 'https://min-api.cryptocompare.com/data/pricemulti?fsyms=ETH&tsyms=USD&api_key=' + str(config.EthereumAPIKey)
         async with aiohttp.ClientSession() as session:
