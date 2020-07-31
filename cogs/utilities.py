@@ -29,8 +29,7 @@ class Utilties(commands.Cog):
             await ctx.send(s)
 
     @commands.command(description = 'Returns current price of ETH in USD',
-                    brief = 'Returns current price of ETH in USD'
-    )
+                    brief = 'Returns current price of ETH in USD')
     async def eth(self, ctx):
         url = 'https://min-api.cryptocompare.com/data/pricemulti?fsyms=ETH&tsyms=USD&api_key=' + str(config.EthereumAPIKey)
         async with aiohttp.ClientSession() as session:
@@ -40,7 +39,6 @@ class Utilties(commands.Cog):
             msg = 'Ethereum Price: ${:.2f}'.format(response['ETH']['USD'])
         await ctx.send(msg)
 
-
-    @commands.Cog.listener()
-    async def on_command_error(self, ctx, error):
-        await ctx.send('I\'m sorry {}, I\'m afraid I can\'t do that.'.format(ctx.author.mention))
+    # @commands.Cog.listener()
+    # async def on_command_error(self, ctx, error):
+    #     await ctx.send('I\'m sorry {}, I\'m afraid I can\'t do that.'.format(ctx.author.mention))
