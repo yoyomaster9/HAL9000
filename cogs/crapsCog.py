@@ -29,6 +29,9 @@ class CrapsCog(commands.Cog):
             user = self.bot.get_user(game.table.shooter.userID)
             await ctx.send('{} is the shooter!'.format(user.mention))
 
+        game.table.checkBets()
+        # post any updates to bets here
+
     @commands.command()
     async def bet(self, ctx, betType, amt):
         # places amt on betType

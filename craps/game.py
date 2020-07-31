@@ -48,30 +48,28 @@ class Table:
     def createPlayer(self, userID):
         self.players[userID] = Player(userID)
 
-
-        # old code
-        self.bets = {
-            'pass'     : True,
-            'dontpass' : True,
-            'odds'     : False
-            }
-    def changeMinBet(self, bet):
-        self.minBet = bet
-    def changePuck(self, status):
-        self.puck = status
-    def changePoint(self, point):
-        self.point = point
+    def checkBets(self):
+        for bet in self.bets:
+            check = bet.check(self)
+            if check == 'win':
+                bet.player.bankroll += bet.winnings + bet.amt # give player original bet with winnings
+                self.bets.remove(bet)
+            elif check == 'loss':
+                self.bets.remove(bet)
+            
 
 
 class Bet:
     def __init__(self, userID, checkfunction):
         self.userID = userID
         self.checkfunction = checkfunction
+        self.winnings = 0 # Maybe turn into function??
 
     def checkState(self, table):
         # will import table, and determine if the bet
         # is won, lost, or diesn't change
         self.checkfunction(table)
+        # check funciton will return Win, Loss, or None
 
 
 
