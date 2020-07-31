@@ -63,5 +63,17 @@ class Table:
         self.point = point
 
 
+class Bet:
+    def __init__(self, userID, checkfunction):
+        self.userID = userID
+        self.checkfunction = checkfunction
+
+    def checkState(self, table):
+        # will import table, and determine if the bet
+        # is won, lost, or diesn't change
+        self.checkfunction(table)
+
+
+
 
 table = Table()
