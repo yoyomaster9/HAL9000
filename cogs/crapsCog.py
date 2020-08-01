@@ -20,6 +20,8 @@ class CrapsCog(commands.Cog):
         if game.table.shooter == player:
             game.table.shooter = None
 
+        # Will also need to remove any bets made by the player!s
+
     @commands.command()
     async def roll(self, ctx):
         player = game.table.getPlayer(ctx.author.id)
