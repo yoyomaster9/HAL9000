@@ -39,14 +39,20 @@ class Table:
         self.minBet = config.MINBET
         self.shooter = None
         self.players = {} # will be dict of players userID:player(userID)
+        self.bets = []
 
     def getPlayer(self, userID): # returns player if exists, creates new otherwise
         if userID not in self.players:
-            self.createPlayer(userID)
+            self.addPlayer(userID)
         return self.players[userID]
 
-    def createPlayer(self, userID):
+    def addPlayer(self, userID):
         self.players[userID] = Player(userID)
+
+    def removePlayer(self, userID):
+        for bet in self.getPlayer(userID).bets:
+            self.bets.remove(bet)
+        del self.players[userID]
 
     def checkBets(self):
         for bet in self.bets:
@@ -56,14 +62,12 @@ class Table:
                 self.bets.remove(bet)
             elif check == 'loss':
                 self.bets.remove(bet)
-            
-
 
 class Bet:
     def __init__(self, userID, checkfunction):
         self.userID = userID
         self.checkfunction = checkfunction
-        self.winnings = 0 # Maybe turn into function??
+        self.payout = 0 # Maybe turn into function??
 
     def checkState(self, table):
         # will import table, and determine if the bet
