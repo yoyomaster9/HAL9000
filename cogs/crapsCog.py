@@ -17,6 +17,8 @@ class CrapsCog(commands.Cog):
         player = game.table.getPlayer(ctx.author.id)
         await ctx.send('{} left the table with ${}!'.format(ctx.author.mention, player.bankroll))
         del game.table.players[ctx.author.id]
+        if game.table.shooter == player:
+            game.table.shooter = None
 
     @commands.command()
     async def roll(self, ctx):
