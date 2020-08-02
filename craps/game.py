@@ -1,5 +1,6 @@
 import random
 from craps import config
+from craps import bet
 
 class Dice:
     def __init__(self):
@@ -19,18 +20,14 @@ class Dice:
 
 class Puck:
     def __init__(self):
-        self.point = 0
-        # point can be {0, 4, 5, 6, 8, 9, 10}
-        self.status = 'off'
-
-        # Future rewrite - might not need self.status
+        self.point = None
+        self.state = 'off'
 
 class Player:
     def __init__(self, userID):
         self.userID = userID
         self.bankroll = 0
         self.bets = []
-
 
 class Table:
     def __init__(self):
@@ -54,28 +51,40 @@ class Table:
             self.bets.remove(bet)
         del self.players[userID]
 
+    def roll(self, player):
+        if self.shooter == None:
+            self.shooter = player
+        elif player != self.shooter:
+            raise ShooterError('Wrong player rolling!')
+
+        self.dice.roll()
+        self.checkBets()
+        
+        if self.puck.state == 'off' and self.dice.sum in [4, 5, 6, 8, 9, 10]:
+            self.puck.state = 'on'
+            self.puck.point = self.dice.sum
+
+        elif self.puck.state == 'on' and self.dice.sum in [7, self.puck.point]:
+            self.puck.state = 'off'
+            self.puck.point = None
+            self.shooter = None
+
     def checkBets(self):
         for bet in self.bets:
-            check = bet.check(self)
-            if check == 'win':
-                bet.player.bankroll += bet.winnings + bet.amt # give player original bet with winnings
+            bet.check(self)
+            if bet.status == 'win':
+                bet.player.bankroll += bet.winnings
                 self.bets.remove(bet)
-            elif check == 'loss':
+            elif bet.status == 'loss':
                 self.bets.remove(bet)
 
-class Bet:
-    def __init__(self, userID, checkfunction):
-        self.userID = userID
-        self.checkfunction = checkfunction
-        self.payout = 0 # Maybe turn into function??
+    def makeBet(self, player, bet):
+        # bet will be class
+        # player will loose bet.amt
+        # will raise error if bet could not be made
+        pass
 
-    def checkState(self, table):
-        # will import table, and determine if the bet
-        # is won, lost, or diesn't change
-        self.checkfunction(table)
-        # check funciton will return Win, Loss, or None
-
-
-
+class ShooterError(Exception):
+    pass
 
 table = Table()
