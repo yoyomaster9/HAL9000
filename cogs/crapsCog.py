@@ -53,7 +53,7 @@ class CrapsCog(commands.Cog):
             game.table.makeBet(player, bet, amt)
             await ctx.send('Bet made!')
         except game.BetBankrollError:
-            await ctx.send('Bet size too large! Your bankroll is ${}.'.format(player.bankroll))
+            await ctx.send('Bet size too large! Your bankroll is ${:,}.'.format(player.bankroll))
 
     @commands.command()
     async def bets(self, ctx):
@@ -77,6 +77,6 @@ class CrapsCog(commands.Cog):
             await ctx.send('Here are the current players!')
             for player in game.table.players:
                 player = game.table.players[player]
-                await ctx.send('{}, Bankroll: ${}'.format(player, player.bankroll))
+                await ctx.send('{}, Bankroll: ${:,}'.format(player, player.bankroll))
         else:
             await ctx.send('No players have joined the table!')
