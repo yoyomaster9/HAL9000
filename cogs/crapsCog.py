@@ -2,6 +2,7 @@ from discord.ext import commands
 import config
 from craps import game
 import craps.config
+import craps.bet
 
 class CrapsCog(commands.Cog):
     def __init__(self, bot):
@@ -52,8 +53,12 @@ class CrapsCog(commands.Cog):
             bet = game.bet.getBet(betType)
             game.table.makeBet(player, bet, amt)
             await ctx.send('Bet made!')
+
         except game.BetBankrollError:
             await ctx.send('Bet size too large! Your bankroll is ${:,}.'.format(player.bankroll))
+
+        except craps.bet.PlaceBetError:
+            await ctx.send('Error! Bet cannot be placed.')
 
     @commands.command()
     async def bets(self, ctx):

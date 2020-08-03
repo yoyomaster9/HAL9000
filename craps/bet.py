@@ -3,6 +3,7 @@ class Bet:
     def __init__(self, player, amt):
         self.player = player
         self.amt = amt
+        self.status = None
 
     def __str__(self):
         return '{} has a {} bet of ${}.'.format(self.player.name, self.type, self.amt)
@@ -14,11 +15,9 @@ class Bet:
 class Passline(Bet):
     type = 'passline'
     def __init__(self, player, amt):
+        super().__init__(player, amt)
         if player.table.puck.state == 'on':
-            raise PasslineError('Cannot make Passline bet if Puck is already on!')
-        self.player = player
-        self.amt = amt
-        self.status = None
+            raise PlaceBetError('Cannot make Passline bet if Puck is already on!')
         self.winnings = 2*amt
 
     def check(self, table):
@@ -41,9 +40,12 @@ def getBet(str):
 
 
 
-class Point(Bet):
-    pass
+class Odds(Bet):
+    type = 'odds'
+    def __init__(self, player, amt):
+        super().__init__(player, amt)
 
 
-class PasslineError(Exception):
+
+class PlaceBetError(Exception):
     pass
