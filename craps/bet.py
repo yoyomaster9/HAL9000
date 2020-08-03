@@ -24,10 +24,10 @@ class Passline(Bet):
         elif puck.state == 'on' and table.dice.sum == 7:
             self.status = 'loss'
 
-def getBetClass(str):
-    for betClass in Bet.__subclassses__():
-        if betClass.name == str:
-            return betClass
+def getBet(str):
+    for bet in Bet.__subclassses__():
+        if bet.name == str:
+            return bet
 
 
 

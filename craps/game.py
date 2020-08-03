@@ -80,9 +80,11 @@ class Table:
                 self.bets.remove(bet)
 
     def makeBet(self, player, bet, amt):
-        b = bet(player, bet, amt)
-        player.bets.append(b)
-        table.bets.append(b)
+        if player.bankroll > amt:
+            b = bet(player, bet, amt)
+            player.bets.append(b)
+            table.bets.append(b)
+
 
 
 

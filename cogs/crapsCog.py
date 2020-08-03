@@ -33,11 +33,11 @@ class CrapsCog(commands.Cog):
         # post any updates to bets here
 
     @commands.command()
-    async def bet(self, ctx, bet, amt):
-        # places amt on bet
-        # will need to convert betType (str) into Bet (class)
-
-        pass
+    async def bet(self, ctx, betType, amt):
+        amt = int(amt)
+        player = game.table.getPlayer(ctx.author.id)
+        bet = game.bet.getBet(betType)
+        game.table.makeBet(player, bet, amt)
 
     @commands.command()
     async def minbet(self, ctx, amt):
