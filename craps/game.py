@@ -24,10 +24,13 @@ class Puck:
         self.state = 'off'
 
 class Player:
-    def __init__(self, userID):
-        self.userID = userID
+    def __init__(self, username):
+        self.username = username
         self.bankroll = 0
         self.bets = []
+
+    def __repr__(self):
+        return self.username
 
 class Table:
     def __init__(self):
@@ -35,24 +38,25 @@ class Table:
         self.puck = Puck()
         self.minBet = config.MINBET
         self.shooter = None
-        self.players = {} # will be dict of players userID:player(userID)
+        self.players = {} # will be dict of players username:player(username)
         self.bets = []
 
-    def getPlayer(self, userID): # returns player if exists, creates new otherwise
-        if userID not in self.players:
-            self.addPlayer(userID)
-        return self.players[userID]
+    def getPlayer(self, username): # returns player if exists, creates new otherwise
+        if username not in self.players:
+            self.addPlayer(username)
+        return self.players[username]
 
-    def addPlayer(self, userID):
-        self.players[userID] = Player(userID)
-        self.players[userID].table = self
+    def addPlayer(self, username):
+        self.players[username] = Player(username)
+        self.players[username].table = self
 
-    def removePlayer(self, userID):
-        for bet in self.getPlayer(userID).bets:
+    def removePlayer(self, username):
+        for bet in self.getPlayer(username).bets:
             self.bets.remove(bet)
-        del self.players[userID]
+        del self.players[username]
 
     def roll(self, player):
+        self.completedBets = [] # completedBets will be list of bets that won/lost
         if self.shooter == None:
             self.shooter = player
         elif player != self.shooter:
@@ -70,21 +74,31 @@ class Table:
             self.puck.point = None
             self.shooter = None
 
+
+
     def checkBets(self):
         for bet in self.bets:
             bet.check(self)
             if bet.status == 'win':
                 bet.player.bankroll += bet.winnings
-                self.bets.remove(bet)
+                self.completedBets.append(bet)
             elif bet.status == 'loss':
-                self.bets.remove(bet)
+                self.completedBets.append(bet)
+
+        for bet in self.completedBets:
+            self.removeBet(bet)
+
 
     def makeBet(self, player, bet, amt):
         if player.bankroll > amt:
-            b = bet(player, bet, amt)
+            b = bet(player, amt)
+            player.bankroll -= amt
             player.bets.append(b)
             table.bets.append(b)
 
+    def removeBet(self, bet):
+        bet.player.bets.remove(bet)
+        self.bets.remove(bet)
 
 
 
