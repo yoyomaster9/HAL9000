@@ -14,7 +14,7 @@ class CrapsCog(commands.Cog):
             await ctx.send('You cannot drop more than ${:,}!'.format(craps.config.MAXDROPSIZE))
             return
         player = game.table.getPlayer(ctx.author.name)
-        player.bankroll += int(amt)
+        player.bankroll += amt
         await ctx.send('{} now has ${:,}!'.format(player.name, player.bankroll))
 
     @commands.command()
