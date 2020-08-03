@@ -5,10 +5,10 @@ class Bet:
         self.amt = amt
 
     def __str__(self):
-        return '{} has a {} bet of ${}.'.format(self.player.username, self.type, self.amt)
+        return '{} has a {} bet of ${}.'.format(self.player.name, self.type, self.amt)
 
     def __repr__(self):
-        return 'Bet({}, {}, ${})'.format(self.player.username, self.type, self.amt)
+        return 'Bet({}, {}, ${})'.format(self.player.name, self.type, self.amt)
 
 
 class Passline(Bet):
