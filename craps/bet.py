@@ -1,16 +1,14 @@
 class Bet:
+    name = None
     def __init__(self, player, amt):
         self.player = player
         self.amt = amt
 
-    def sevenOut(self):
-        # some bets will have this included
-        pass
-
 class Passline(Bet):
+    name = 'Passline'
     def __init__(self, player, amt):
-        # if puck.state == 'on':
-        #     raise PasslineError('Cannot make Passline bet if Puck is already on!')
+        if player.table.puck.state == 'on':
+            raise PasslineError('Cannot make Passline bet if Puck is already on!')
         self.player = player
         self.amt = amt
         self.status = None
@@ -26,6 +24,10 @@ class Passline(Bet):
         elif puck.state == 'on' and table.dice.sum == 7:
             self.status = 'loss'
 
+def getBetClass(str):
+    for betClass in Bet.__subclassses__():
+        if betClass.name == str:
+            return betClass
 
 
 

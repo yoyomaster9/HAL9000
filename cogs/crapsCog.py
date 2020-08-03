@@ -33,9 +33,10 @@ class CrapsCog(commands.Cog):
         # post any updates to bets here
 
     @commands.command()
-    async def bet(self, ctx, betType, amt):
-        # places amt on betType
+    async def bet(self, ctx, bet, amt):
+        # places amt on bet
         # will need to convert betType (str) into Bet (class)
+
         pass
 
     @commands.command()

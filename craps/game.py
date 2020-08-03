@@ -45,6 +45,7 @@ class Table:
 
     def addPlayer(self, userID):
         self.players[userID] = Player(userID)
+        self.players[userID].table = self
 
     def removePlayer(self, userID):
         for bet in self.getPlayer(userID).bets:
@@ -59,7 +60,7 @@ class Table:
 
         self.dice.roll()
         self.checkBets()
-        
+
         if self.puck.state == 'off' and self.dice.sum in [4, 5, 6, 8, 9, 10]:
             self.puck.state = 'on'
             self.puck.point = self.dice.sum
@@ -78,11 +79,12 @@ class Table:
             elif bet.status == 'loss':
                 self.bets.remove(bet)
 
-    def makeBet(self, player, bet):
-        # bet will be class
-        # player will loose bet.amt
-        # will raise error if bet could not be made
-        pass
+    def makeBet(self, player, bet, amt):
+        b = bet(player, bet, amt)
+        player.bets.append(b)
+        table.bets.append(b)
+
+
 
 class ShooterError(Exception):
     pass
