@@ -93,3 +93,9 @@ class CrapsCog(commands.Cog):
     async def changeShooter(self, ctx, name):
         player = game.table.getPlayer(name)
         game.table.shooter = player
+        await ctx.send('Changing shooter to {}!'.format(player.name))
+
+    @commands.command()
+    async def resetTable(self, ctx):
+        game.table.resetTable()
+        await ctx.send('Resetting table!')

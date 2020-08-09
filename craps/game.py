@@ -113,6 +113,8 @@ class Table:
         bet.player.bets.remove(bet)
         self.bets.remove(bet)
 
+    def resetTable(self):
+        __init__(self)
 
 
 class ShooterError(Exception):
