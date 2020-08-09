@@ -88,3 +88,8 @@ class CrapsCog(commands.Cog):
                 await ctx.send('{}, Bankroll: ${:,}'.format(player, player.bankroll))
         else:
             await ctx.send('No players have joined the table!')
+
+    @commands.command()
+    async def changeShooter(self, ctx, name):
+        player = game.table.getPlayer(name)
+        game.table.shooter = player
