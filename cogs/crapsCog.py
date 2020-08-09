@@ -14,6 +14,9 @@ class CrapsCog(commands.Cog):
         if amt > craps.config.MAXDROPSIZE:
             await ctx.send('You cannot drop more than ${:,}!'.format(craps.config.MAXDROPSIZE))
             return
+        elif amt <= 0:
+            await ctx.send('Invalid drop amout!')
+            return
         player = game.table.getPlayer(ctx.author.name)
         player.bankroll += amt
         await ctx.send('{} now has ${:,}!'.format(player.name, player.bankroll))
@@ -28,6 +31,7 @@ class CrapsCog(commands.Cog):
     async def bankroll(self, ctx):
         player = game.table.getPlayer(ctx.author.name)
         await ctx.send('{} has a bankroll of ${:,}!'.format(player.name, player.bankroll))
+
 
     @commands.command()
     async def roll(self, ctx):
@@ -50,15 +54,14 @@ class CrapsCog(commands.Cog):
         try:
             amt = int(amt)
             player = game.table.getPlayer(ctx.author.name)
-            bet = game.bet.getBet(betType)
-            game.table.makeBet(player, bet, amt)
-            await ctx.send('Bet made!')
+            player.placeBet(betType, amt)
+            await ctx.send('{} made a {} bet of ${}'.format(player.name, betType, amt))
 
-        except game.BetBankrollError:
-            await ctx.send('Bet size too large! Your bankroll is ${:,}.'.format(player.bankroll))
-
-        except craps.bet.PlaceBetError:
+        except craps.bet.PlaceBetError as e:
             await ctx.send('Error! Bet cannot be placed.')
+            await ctx.send(e.message)
+
+
 
     @commands.command()
     async def bets(self, ctx):

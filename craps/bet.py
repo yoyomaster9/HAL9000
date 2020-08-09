@@ -1,3 +1,5 @@
+import craps.config
+
 class Bet:
     name = None
     def __init__(self, player, amt):
@@ -33,19 +35,46 @@ class Passline(Bet):
         elif table.puck.state == 'on' and table.dice.sum == 7:
             self.status = 'loss'
 
+
+class Odds(Bet):
+    type = 'odds'
+    def __init__(self, player, amt, number):
+        super().__init__(player, amt)
+        if player.table.puck.state == 'off':
+            raise PlaceBetError('Cannot make odds bets when puck is off!')
+        self.number = number
+        self.type = 'odds' + str(self.number)
+        self.winnings = amt * (6 / (6-abs(self.number - 7) ))
+
+
+    def check(self, table):
+        if table.dice.sum == self.number:
+            self.status = 'win'
+
+        elif table.dice.sum == 7:
+            self.status = 'loss'
+
+class Hardways(bet):
+    type = 'hardways'
+    def __init__(self, player, amt, number):
+        super().__init__(player, amt)
+        self.number = number
+        self.type = 'hard' + str(self.number)
+        self.winnings = amt * (11 - abs(x-7))
+
+    def check(self, table):
+        if table.dice.sum == self.number and table.dice.dice1 == table.dice.dice2:
+            self.status = 'win'
+
+        elif table.dice.sum == self.number and table.dice.dice1 != table.dice.dice2:
+            self.status = 'loss'
+
 def getBet(str):
     for bet in Bet.__subclasses__():
         if bet.type == str:
             return bet
 
 
-
-class Odds(Bet):
-    type = 'odds'
-    def __init__(self, player, amt):
-        super().__init__(player, amt)
-
-
-
 class PlaceBetError(Exception):
-    pass
+    def __init__(self, message):
+        self.message = message

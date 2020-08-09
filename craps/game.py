@@ -35,6 +35,24 @@ class Player:
     def roll(self):
         self.table.roll(self)
 
+    def placeBet(self, betType, amt):
+
+        if self.bankroll < amt:
+            raise bet.PlaceBetError('Bet too high! {}\'s bankroll is only ${:2f}'.format(self.name, self.bankroll))
+
+        if betType in ['hard4', 'hard6', 'hard8', 'hard10', 'odds4', 'odds5', 'odds6', 'odds8', 'odds9', 'odds10']:
+            betType, arg = betType[:4], int(betType[4:])
+            b = bet.getBet(betType)(self, amt, arg)
+
+        else:
+            b = bet.getBet(betType)(self, amt)
+
+        self.bankroll -= amt
+        self.bets.append(b)
+        self.table.bets.append(b)
+
+
+
 class Table:
     def __init__(self):
         self.dice = Dice()
@@ -89,16 +107,6 @@ class Table:
         for bet in self.completedBets:
             self.removeBet(bet)
 
-
-    def makeBet(self, player, bet, amt):
-        if player.bankroll < amt:
-            raise BetBankrollError
-
-        b = bet(player, amt)
-        player.bankroll -= amt
-        player.bets.append(b)
-        table.bets.append(b)
-
     def removeBet(self, bet):
         bet.player.bets.remove(bet)
         self.bets.remove(bet)
@@ -106,9 +114,6 @@ class Table:
 
 
 class ShooterError(Exception):
-    pass
-
-class BetBankrollError(Exception):
     pass
 
 table = Table()
