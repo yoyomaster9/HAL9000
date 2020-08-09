@@ -54,7 +54,7 @@ class Odds(Bet):
         elif table.dice.sum == 7:
             self.status = 'loss'
 
-class Hardways(bet):
+class Hardways(Bet):
     type = 'hardways'
     def __init__(self, player, amt, number):
         super().__init__(player, amt)
