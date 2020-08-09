@@ -4,9 +4,7 @@ import config
 import cogs
 import random
 
-BOT_PREFIX = '.'
-
-bot = commands.Bot(command_prefix=BOT_PREFIX)
+bot = commands.Bot(command_prefix=config.BOT_PREFIX)
 for x in commands.Cog.__subclasses__():
     bot.add_cog(x(bot))
 
