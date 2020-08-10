@@ -6,12 +6,15 @@ class Dice:
     def __init__(self):
         self.dice = (0, 0)
         self.sum = 0
+
     def roll(self):
         self.dice = (random.randint(1, 6), random.randint(1, 6))
         self.sum = sum(self.dice)
         return self.dice
+
     def __str__(self):
         return str(self.dice)
+
     def __repr__(self):
         return str(self.dice)
     def __eq__(self, other):
@@ -99,7 +102,7 @@ class Table:
 
     def checkBets(self):
         for bet in self.bets:
-            bet.check(self)
+            bet.check()
             if bet.status == 'win':
                 bet.player.bankroll += bet.winnings
                 self.completedBets.append(bet)
@@ -115,6 +118,7 @@ class Table:
 
     def resetTable(self):
         self.__init__()
+
 
 
 class ShooterError(Exception):
