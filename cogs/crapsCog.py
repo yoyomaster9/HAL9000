@@ -102,13 +102,11 @@ class CrapsCog(commands.Cog):
         else:
             await ctx.send('No players have joined the table!')
 
-    # @commands.command() # Need to fix this function
-    # async def changeShooter(self, ctx, other):
-    #     if ctx.author.name not in game.table.players:
-    #         game.table.addPlayer(ctx.author.name)
-    #     player = game.table.getPlayer(other)
-    #     game.table.shooter = player
-    #     await ctx.send('Changing shooter to {}!'.format(player.name))
+    @commands.command()
+    async def changeShooter(self, ctx, other):
+        player = game.table.getPlayer(other)
+        game.table.shooter = player
+        await ctx.send('Changing shooter to {}!'.format(player.name))
 
     @commands.command()
     async def resetTable(self, ctx):
