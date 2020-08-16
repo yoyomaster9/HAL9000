@@ -16,7 +16,7 @@ class Dice:
 
     def __repr__(self):
         return str(self.dice)
-        
+
     def __eq__(self, other):
         return self.dice == other
 
@@ -45,7 +45,6 @@ class Player:
 
         if betType in ['hard4', 'hard6', 'hard8', 'hard10']:
             betType, arg = betType[:4] + 'ways', int(betType[4:])
-            print(betType, arg)
             b = bet.getBet(betType)(self, amt, arg)
 
         else:
