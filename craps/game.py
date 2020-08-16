@@ -16,6 +16,7 @@ class Dice:
 
     def __repr__(self):
         return str(self.dice)
+        
     def __eq__(self, other):
         return self.dice == other
 

@@ -45,7 +45,6 @@ class Odds(Bet):
             raise PlaceBetError('Cannot make odds bets when puck is off!')
         self.winnings = int(self.amt * (6 / (6-abs(self.table.puck.point - 7) )))
 
-
     def check(self):
         if self.table.dice.sum == self.table.puck.point:
             self.status = 'win'
@@ -62,10 +61,10 @@ class Hardways(Bet):
         self.winnings = int(self.amt * (11 - abs(self.number-7)))
 
     def check(self):
-        if self.table.dice.sum == self.number and self.table.dice[0] == self.table.dice[1]:
+        if self.table.dice.sum == self.number and self.table.dice.dice[0] == self.table.dice.dice[1]:
             self.status = 'win'
 
-        elif self.table.dice.sum == self.number and self.table.dice[0] != self.table.dice[1]:
+        elif self.table.dice.sum == self.number and self.table.dice.dice[0] != self.table.dice.dice[1]:
             self.status = 'loss'
 
         elif self.table.dice.sum == 7:
