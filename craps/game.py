@@ -109,7 +109,7 @@ class Table:
         for bet in self.bets:
             bet.check()
             if bet.status == 'win':
-                bet.player.bankroll += bet.winnings
+                bet.player.bankroll += bet.amt + bet.winnings
                 self.completedBets.append(bet)
             elif bet.status == 'loss':
                 self.completedBets.append(bet)
@@ -126,7 +126,17 @@ class Table:
 
     def printBets(self):
         l = [[bet.player.name.title(), bet.type.title(), '$' + str(bet.amt)] for bet in self.bets]
-        l.insert(0, ['Player', 'Bet', 'Amount'])
+        l.insert(0, ['Player', 'Bet', 'Wagered'])
+        return util.col(l)
+
+    def printBetsWon(self):
+        l = [[bet.player.name.title(), bet.type.title(), '$' + str(bet.amt), '$' + str(bet.winnings)] for bet in self.completedBets if bet.status == 'win']
+        l.insert(0, ['Player', 'Bet', 'Wagered', 'Winnings'])
+        return util.col(l)
+
+    def printBetsLost(self):
+        l = [[bet.player.name.title(), bet.type.title(), '$' + str(bet.amt)] for bet in self.completedBets if bet.status == 'loss']
+        l.insert(0, ['Player', 'Bet', 'Wagered'])
         return util.col(l)
 
 class PlayerNotFound(Exception):

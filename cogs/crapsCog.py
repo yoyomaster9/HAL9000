@@ -53,15 +53,15 @@ class CrapsCog(commands.Cog):
                 msg += 'The puck is on the {}.'.format(game.table.puck.point)
             elif game.table.puck.state == 'off':
                 msg += 'The puck is off!'
+
+            if [bet for bet in game.table.completedBets if bet.status == 'win'] != []:
+                msg += '\nWe have some winners!\n```' + game.table.printBetsWon() + '```'
+
+            if [bet for bet in game.table.completedBets if bet.status == 'loss'] != []:
+                msg += '\nOh no! We have some losers!\n```' + game.table.printBetsLost() + '```'
+
             await ctx.send(msg)
 
-            for bet in game.table.completedBets:
-                msg = ''
-                if bet.status == 'win':
-                    msg += '{} won their {} bet of ${:,}!\n'.format(bet.player.name, bet.type, bet.amt)
-                elif bet.status == 'loss':
-                    msg += '{} lost their {} bet of ${:,}.\n'.format(bet.player.name, bet.type, bet.amt)
-                await ctx.send(msg)
 
         except game.ShooterError:
             await ctx.send('Wrong shooter! {} has the dice.'.format(game.table.shooter))

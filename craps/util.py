@@ -4,7 +4,7 @@ def col(x, padding = 2, uniform = False):
     l = [row.copy() for row in x] # copy data instead of assignment
     for i in range(len(l)-1):
         if len(l[i]) != len(l[i+1]):
-            return 'This did not work!'
+            raise Exception('Check dimensions before using col')
     colwidths = [max([len(row[i]) for row in l]) + padding for i in range(len(l[0]))]
 
     if uniform:
