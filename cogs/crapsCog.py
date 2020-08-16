@@ -12,10 +12,8 @@ class CrapsCog(commands.Cog):
     async def drop(self, ctx, amt):
         if ctx.author.name not in game.table.players:
             game.table.addPlayer(ctx.author.name)
-        print('test')
         amt = int(amt)
         player = game.table.getPlayer(ctx.author.name)
-        print('test')
 
         if amt > craps.config.MAXDROPSIZE:
             await ctx.send('You cannot drop more than ${:,}!'.format(craps.config.MAXDROPSIZE))
@@ -24,7 +22,6 @@ class CrapsCog(commands.Cog):
             await ctx.send('Invalid drop amout!')
             return
         player.bankroll += amt
-        print('test')
 
         await ctx.send('{} now has ${:,}!'.format(player.name, player.bankroll))
 
