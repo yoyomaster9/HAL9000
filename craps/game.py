@@ -38,24 +38,24 @@ class Player:
     def roll(self):
         self.table.roll(self)
 
-    def placeBet(self, betType, amt):
+    def placeBet(self, betType, wager):
 
-        if self.bankroll < amt:
+        if self.bankroll < wager:
             raise bet.PlaceBetError('Bet too high! {}\'s bankroll is only ${:2f}'.format(self.name, self.bankroll))
 
         if betType in ['hard4', 'hard6', 'hard8', 'hard10']:
             betType, arg = betType[:4] + 'ways', int(betType[4:])
-            b = bet.getBet(betType)(self, amt, arg)
+            b = bet.getBet(betType)(self, wager, arg)
 
         else:
-            b = bet.getBet(betType)(self, amt)
+            b = bet.getBet(betType)(self, wager)
 
-        self.bankroll -= amt
+        self.bankroll -= wager
         self.bets.append(b)
         self.table.bets.append(b)
 
     def printBets(self):
-        l = [[bet.player.name.title(), bet.type.title(), '$' + str(bet.amt)] for bet in self.bets]
+        l = [[bet.player.name.title(), bet.type.title(), '$' + str(bet.wager)] for bet in self.bets]
         l.insert(0, ['Player', 'Bet', 'Amount'])
         return util.col(l)
 
@@ -109,7 +109,7 @@ class Table:
         for bet in self.bets:
             bet.check()
             if bet.status == 'win':
-                bet.player.bankroll += bet.amt + bet.winnings
+                bet.player.bankroll += bet.wager + bet.winnings
                 self.completedBets.append(bet)
             elif bet.status == 'loss':
                 self.completedBets.append(bet)
@@ -125,17 +125,17 @@ class Table:
         self.__init__()
 
     def printBets(self):
-        l = [[bet.player.name.title(), bet.type.title(), '$' + str(bet.amt)] for bet in self.bets]
+        l = [[bet.player.name.title(), bet.type.title(), '$' + str(bet.wager)] for bet in self.bets]
         l.insert(0, ['Player', 'Bet', 'Wagered'])
         return util.col(l)
 
     def printBetsWon(self):
-        l = [[bet.player.name.title(), bet.type.title(), '$' + str(bet.amt), '$' + str(bet.winnings)] for bet in self.completedBets if bet.status == 'win']
+        l = [[bet.player.name.title(), bet.type.title(), '$' + str(bet.wager), '$' + str(bet.winnings)] for bet in self.completedBets if bet.status == 'win']
         l.insert(0, ['Player', 'Bet', 'Wagered', 'Winnings'])
         return util.col(l)
 
     def printBetsLost(self):
-        l = [[bet.player.name.title(), bet.type.title(), '$' + str(bet.amt)] for bet in self.completedBets if bet.status == 'loss']
+        l = [[bet.player.name.title(), bet.type.title(), '$' + str(bet.wager)] for bet in self.completedBets if bet.status == 'loss']
         l.insert(0, ['Player', 'Bet', 'Wagered'])
         return util.col(l)
 

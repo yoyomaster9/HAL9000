@@ -2,26 +2,26 @@ import craps.config
 
 class Bet:
     name = None
-    def __init__(self, player, amt):
+    def __init__(self, player, wager):
         self.player = player
         self.table = player.table
-        self.amt = int(amt)
+        self.wager = int(wager)
         self.status = None
 
     def __str__(self):
-        return '{} has a {} bet of ${}.'.format(self.player.name, self.type, self.amt)
+        return '{} has a {} bet of ${}.'.format(self.player.name, self.type, self.wager)
 
     def __repr__(self):
-        return 'Bet({}, {}, ${})'.format(self.player.name, self.type, self.amt)
+        return 'Bet({}, {}, ${})'.format(self.player.name, self.type, self.wager)
 
 
 class Passline(Bet):
     type = 'passline'
-    def __init__(self, player, amt):
-        super().__init__(player, amt)
+    def __init__(self, player, wager):
+        super().__init__(player, wager)
         if self.table.puck.state == 'on':
             raise PlaceBetError('Cannot make Passline bet if Puck is already on!')
-        self.winnings = self.amt
+        self.winnings = self.wager
 
     def check(self):
         if self.table.puck.state == 'off' and self.table.dice.sum in [7, 11]:
@@ -39,11 +39,11 @@ class Passline(Bet):
 
 class Odds(Bet):
     type = 'odds'
-    def __init__(self, player, amt):
-        super().__init__(player, amt)
+    def __init__(self, player, wager):
+        super().__init__(player, wager)
         if self.table.puck.state == 'off':
             raise PlaceBetError('Cannot make odds bets when puck is off!')
-        self.winnings = int(self.amt * (6 / (6-abs(self.table.puck.point - 7) )) - self.amt)
+        self.winnings = int(self.wager * (6 / (6-abs(self.table.puck.point - 7) )) - self.wager)
 
     def check(self):
         if self.table.dice.sum == self.table.puck.point:
@@ -54,11 +54,11 @@ class Odds(Bet):
 
 class Hardways(Bet):
     type = 'hardways'
-    def __init__(self, player, amt, number):
-        super().__init__(player, amt)
+    def __init__(self, player, wager, number):
+        super().__init__(player, wager)
         self.number = number
         self.type = 'hard' + str(self.number)
-        self.winnings = int(self.amt * (11 - abs(self.number-7)) - self.amt)
+        self.winnings = int(self.wager * (11 - abs(self.number-7)) - self.wager)
 
     def check(self):
         if self.table.dice.sum == self.number and self.table.dice.dice[0] == self.table.dice.dice[1]:

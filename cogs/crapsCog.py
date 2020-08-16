@@ -67,14 +67,14 @@ class CrapsCog(commands.Cog):
             await ctx.send('Wrong shooter! {} has the dice.'.format(game.table.shooter))
 
     @commands.command()
-    async def bet(self, ctx, betType, amt):
+    async def bet(self, ctx, betType, wager):
         if ctx.author.name not in game.table.players:
             game.table.addPlayer(ctx.author.name)
         try:
-            amt = int(amt)
+            wager = int(wager)
             player = game.table.getPlayer(ctx.author.name)
-            player.placeBet(betType, amt)
-            await ctx.send('{} made a {} bet of ${}!'.format(player.name, betType, amt))
+            player.placeBet(betType, wager)
+            await ctx.send('{} made a {} bet of ${}!'.format(player.name, betType, wager))
 
         except craps.bet.PlaceBetError as e:
             await ctx.send('Error! Bet cannot be placed.')
