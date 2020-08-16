@@ -39,17 +39,15 @@ class Passline(Bet):
 
 class Odds(Bet):
     type = 'odds'
-    def __init__(self, player, amt, number):
+    def __init__(self, player, amt):
         super().__init__(player, amt)
         if self.table.puck.state == 'off':
             raise PlaceBetError('Cannot make odds bets when puck is off!')
-        self.number = number
-        self.type = 'odds' + str(self.number)
-        self.winnings = amt * (6 / (6-abs(self.number - 7) ))
+        self.winnings = int(self.amt * (6 / (6-abs(self.table.puck.point - 7) )))
 
 
     def check(self):
-        if self.table.dice.sum == self.number:
+        if self.table.dice.sum == self.table.puck.point:
             self.status = 'win'
 
         elif self.table.dice.sum == 7:
@@ -61,13 +59,16 @@ class Hardways(Bet):
         super().__init__(player, amt)
         self.number = number
         self.type = 'hard' + str(self.number)
-        self.winnings = amt * (11 - abs(x-7))
+        self.winnings = int(self.amt * (11 - abs(self.number-7)))
 
     def check(self):
-        if self.table.dice.sum == self.number and self.table.dice.dice1 == self.table.dice.dice2:
+        if self.table.dice.sum == self.number and self.table.dice[0] == self.table.dice[1]:
             self.status = 'win'
 
-        elif self.table.dice.sum == self.number and self.table.dice.dice1 != self.table.dice.dice2:
+        elif self.table.dice.sum == self.number and self.table.dice[0] != self.table.dice[1]:
+            self.status = 'loss'
+
+        elif self.table.dice.sum == 7:
             self.status = 'loss'
 
 def getBet(str):
