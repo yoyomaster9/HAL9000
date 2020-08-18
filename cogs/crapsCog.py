@@ -82,8 +82,11 @@ class CrapsCog(commands.Cog):
 
     @commands.command()
     async def bets(self, ctx):
-        msg = '```\n' + game.table.printBets() + '\n```'
-        await ctx.send(msg)
+        if game.table.bets != []:
+            msg = '```\n' + game.table.printBets() + '\n```'
+            await ctx.send(msg)
+        else:
+            await ctx.send('No bets have been made!')
 
     @commands.command()
     async def puck(self, ctx):
