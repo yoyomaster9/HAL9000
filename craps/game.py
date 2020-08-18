@@ -41,7 +41,7 @@ class Player:
     def placeBet(self, betType, wager):
 
         if self.bankroll < wager:
-            raise bet.PlaceBetError('Bet too high! {}\'s bankroll is only ${:2f}'.format(self.name, self.bankroll))
+            raise bet.PlaceBetError('Bet too high! {}\'s bankroll is only ${}'.format(self.name, int(self.bankroll)))
 
         if betType in ['hard4', 'hard6', 'hard8', 'hard10']:
             betType, arg = betType[:4] + 'ways', int(betType[4:])
