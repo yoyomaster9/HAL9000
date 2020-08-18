@@ -125,17 +125,17 @@ class Table:
         self.__init__()
 
     def printBets(self):
-        l = [[bet.player.name.title(), bet.type.title(), '$' + str(bet.wager)] for bet in self.bets]
+        l = [[bet.player.name, bet.type.title(), '$' + str(bet.wager)] for bet in self.bets]
         l.insert(0, ['Player', 'Bet', 'Wagered'])
         return util.col(l)
 
     def printBetsWon(self):
-        l = [[bet.player.name.title(), bet.type.title(), '$' + str(bet.wager), '$' + str(bet.winnings)] for bet in self.completedBets if bet.status == 'win']
+        l = [[bet.player.name, bet.type.title(), '$' + str(bet.wager), '$' + str(bet.winnings)] for bet in self.completedBets if bet.status == 'win']
         l.insert(0, ['Player', 'Bet', 'Wagered', 'Winnings'])
         return util.col(l)
 
     def printBetsLost(self):
-        l = [[bet.player.name.title(), bet.type.title(), '$' + str(bet.wager)] for bet in self.completedBets if bet.status == 'loss']
+        l = [[bet.player.name, bet.type.title(), '$' + str(bet.wager)] for bet in self.completedBets if bet.status == 'loss']
         l.insert(0, ['Player', 'Bet', 'Wagered'])
         return util.col(l)
 
