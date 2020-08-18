@@ -61,7 +61,8 @@ class Player:
 
 
 class Table:
-    def __init__(self):
+    def __init__(self, channelID):
+        self.channelID = channelID
         self.dice = Dice()
         self.puck = Puck()
         self.minBet = config.MINBET
@@ -144,5 +145,3 @@ class PlayerNotFound(Exception):
 
 class ShooterError(Exception):
     pass
-
-table = Table()
