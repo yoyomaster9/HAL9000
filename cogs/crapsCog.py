@@ -83,15 +83,20 @@ class CrapsCog(commands.Cog):
         self.saveTables()
 
     @commands.command()
-    async def bet(self, ctx, betType, wager):
+    async def bet(self, ctx, *args):
+        # *args will be tuple of all bets and wagers
         self.update(ctx)
-        try:
-            wager = int(wager)
-            self.player.placeBet(betType, wager)
-            await ctx.send('{} made a {} bet of ${}!'.format(self.player.name, betType, wager))
-        except craps.bet.PlaceBetError as e:
-            await ctx.send('Error! Bet cannot be placed.')
-            await ctx.send(e.message)
+        if len(args) % 2 != 0:
+            raise Exception('Odd number of args!')
+        l = [(args[i], args[i+1]) for i in range(0, len(args), 2)]
+        for betType, wager in l:
+            try:
+                wager = int(wager)
+                self.player.placeBet(betType, wager)
+                await ctx.send('{} made a {} bet of ${}!'.format(self.player.name, betType, wager))
+            except craps.bet.PlaceBetError as e:
+                await ctx.send('Error! Bet cannot be placed.')
+                await ctx.send(e.message)
         self.saveTables()
 
     @commands.command()
