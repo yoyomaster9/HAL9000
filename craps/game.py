@@ -20,7 +20,6 @@ class Dice:
     def __eq__(self, other):
         return self.dice == other
 
-
 class Puck:
     def __init__(self):
         self.point = None
@@ -58,7 +57,6 @@ class Player:
         l = [[bet.player.name.title(), bet.type.title(), '$' + str(bet.wager)] for bet in self.bets]
         l.insert(0, ['Player', 'Bet', 'Amount'])
         return util.col(l)
-
 
 class Table:
     def __init__(self, channelID):
@@ -139,6 +137,11 @@ class Table:
         l = [[bet.player.name, bet.type.title(), '$' + str(bet.wager)] for bet in self.completedBets if bet.status == 'loss']
         l.insert(0, ['Player', 'Bet', 'Wagered'])
         return util.col(l)
+
+
+
+
+
 
 class PlayerNotFound(Exception):
     pass

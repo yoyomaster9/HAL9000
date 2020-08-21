@@ -3,20 +3,28 @@ import config
 from craps import game
 import craps.config
 import craps.bet
+import pickle, os
 
 class CrapsCog(commands.Cog):
     def __init__(self, bot):
-        self.bot = bot
         self.tables = {} # dict of tables, indexed by channel id
+        if os.path.exists('tables.pickle'):
+            with open('tables.pickle', 'rb') as file:
+                self.tables = pickle.load(file)
+        self.bot = bot
+        self.saveTables()
 
-    async def update(self, ctx):
+    def update(self, ctx):
         if ctx.channel.id not in self.tables:
-            await ctx.send('This channel does not have a table created!')
             raise Exception('No table created for channel {}'.format(ctx.channel.id))
         self.table = self.tables[ctx.channel.id]
         if ctx.author.name not in self.table.players:
             self.table.addPlayer(ctx.author.name)
         self.player = self.table.getPlayer(ctx.author.name)
+
+    def saveTables(self):
+        with open('tables.pickle', 'wb') as file:
+            pickle.dump(self.tables, file)
 
     @commands.command()
     async def createTable(self, ctx):
@@ -24,12 +32,13 @@ class CrapsCog(commands.Cog):
             await ctx.send('This channel already has a table!')
         else:
             self.tables[ctx.channel.id] = game.Table(ctx.channel.id)
-            await ctx.send('Table created! Table bound to {}'.format(ctx.channel.mention))
+            await ctx.send('Table created! Table bound to this channel.')
+        self.saveTables()
 
     @commands.command()
     async def drop(self, ctx, amt):
-        await self.update(ctx)
         amt = int(amt)
+        self.update(ctx)
         if amt > craps.config.MAXDROPSIZE:
             await ctx.send('You cannot drop more than ${:,}!'.format(craps.config.MAXDROPSIZE))
             return
@@ -37,24 +46,24 @@ class CrapsCog(commands.Cog):
             await ctx.send('Invalid drop amout!')
             return
         self.player.bankroll += amt
-
         await ctx.send('{} now has ${:,}!'.format(self.player.name, self.player.bankroll))
+        self.saveTables()
 
     @commands.command()
     async def walk(self, ctx):
-        await self.update(ctx)
+        self.update(ctx)
         await ctx.send('{} left the table with ${:,}!'.format(self.player.name, self.player.bankroll))
         self.table.removePlayer(ctx.author.name)
+        self.saveTables()
 
     @commands.command()
     async def bankroll(self, ctx):
-        await self.update(ctx)
+        self.update(ctx)
         await ctx.send('{} has a bankroll of ${:,}!'.format(self.player.name, self.player.bankroll))
-
 
     @commands.command()
     async def roll(self, ctx):
-        await self.update(ctx)
+        self.update(ctx)
         try:
             self.player.roll()
             msg = '{} rolled {}! '.format(ctx.author.name, self.table.dice)
@@ -68,29 +77,27 @@ class CrapsCog(commands.Cog):
 
             if [bet for bet in self.table.completedBets if bet.status == 'loss'] != []:
                 msg += '\nOh no! We have some losers!\n```' + self.table.printBetsLost() + '```'
-
             await ctx.send(msg)
-
-
         except game.ShooterError:
             await ctx.send('Wrong shooter! {} has the dice.'.format(self.table.shooter))
+        self.saveTables()
 
     @commands.command()
     async def bet(self, ctx, betType, wager):
-        await self.update(ctx)
+        self.update(ctx)
         try:
             wager = int(wager)
             self.player.placeBet(betType, wager)
             await ctx.send('{} made a {} bet of ${}!'.format(self.player.name, betType, wager))
-
         except craps.bet.PlaceBetError as e:
             await ctx.send('Error! Bet cannot be placed.')
             await ctx.send(e.message)
+        self.saveTables()
 
     @commands.command()
     async def bets(self, ctx):
-        await self.update(ctx)
-        if self.table.bets = []:
+        self.update(ctx)
+        if self.table.bets == []:
             await ctx.send('There are no bets placed!')
         else:
             msg = '```\n' + self.table.printBets() + '\n```'
@@ -98,7 +105,7 @@ class CrapsCog(commands.Cog):
 
     @commands.command()
     async def puck(self, ctx):
-        await self.update(ctx)
+        self.update(ctx)
         if self.table.puck.state == 'off':
             await ctx.send('The puck is off!')
         elif self.table.puck.state == 'on':
@@ -106,7 +113,7 @@ class CrapsCog(commands.Cog):
 
     @commands.command()
     async def players(self, ctx):
-        await self.update(ctx)
+        self.update(ctx)
         if self.table.players != {}:
             await ctx.send('Here are the current players!')
             for name in self.table.players:
@@ -117,12 +124,14 @@ class CrapsCog(commands.Cog):
 
     @commands.command()
     async def changeShooter(self, ctx, other):
-        await self.update(ctx)
+        self.update(ctx)
         self.table.shooter = self.table.getPlayer(other)
         await ctx.send('Changing shooter to {}!'.format(self.table.shooter.name))
+        self.saveTables()
 
     @commands.command()
     async def resetTable(self, ctx):
-        await self.update(ctx)
+        self.update(ctx)
         self.table.resetTable()
         await ctx.send('Resetting table!')
+        self.saveTables()

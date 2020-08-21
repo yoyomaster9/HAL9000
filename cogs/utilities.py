@@ -43,7 +43,3 @@ class Utilties(commands.Cog):
     async def on_command_error(self, ctx, error):
         await ctx.send('I\'m sorry {}, I\'m afraid I can\'t do that.'.format(ctx.author.mention))
         print(error)
-
-    # @commands.Cog.listener()
-    # async def on_command_error(self, ctx, error):
-    #     await ctx.send('I\'m sorry {}, I\'m afraid I can\'t do that.'.format(ctx.author.mention))
