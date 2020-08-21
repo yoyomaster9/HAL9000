@@ -121,7 +121,7 @@ class Table:
         self.bets.remove(bet)
 
     def resetTable(self):
-        self.__init__()
+        self.__init__(self.channelID)
 
     def printBets(self):
         l = [[bet.player.name, bet.type.title(), '$' + str(bet.wager)] for bet in self.bets]
