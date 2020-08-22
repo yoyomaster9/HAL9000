@@ -81,9 +81,9 @@ class Table:
     def removePlayer(self, name):
         for bet in self.getPlayer(name).bets:
             self.bets.remove(bet)
-        del self.players[name]
-        if self.shooter.name == name:
+        if self.shooter == self.players[name]:
             self.shooter = None
+        del self.players[name]
 
     def roll(self, player):
         self.completedBets = [] # completedBets will be list of bets that won/lost
