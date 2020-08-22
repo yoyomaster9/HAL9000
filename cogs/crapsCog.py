@@ -128,7 +128,7 @@ class CrapsCog(commands.Cog):
             await ctx.send('No players have joined the table!')
 
     @commands.command()
-    async def clearShooter(self, ctx, other):
+    async def clearShooter(self, ctx):
         self.update(ctx)
         self.table.shooter = None
         await ctx.send('Shooter cleared! Anyone can roll!')
