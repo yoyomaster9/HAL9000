@@ -123,7 +123,7 @@ class CrapsCog(commands.Cog):
             await ctx.send('Here are the current players!')
             for name in self.table.players:
                 player = self.table.getPlayer(name)
-                await ctx.send('{}, Bankroll: ${:,}'.format(player, self.player.bankroll))
+                await ctx.send('{}, Bankroll: ${:,}'.format(player, player.bankroll))
         else:
             await ctx.send('No players have joined the table!')
 
