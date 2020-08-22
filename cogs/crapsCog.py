@@ -114,7 +114,7 @@ class CrapsCog(commands.Cog):
         if self.table.puck.state == 'off':
             await ctx.send('The puck is off!')
         elif self.table.puck.state == 'on':
-            await ctx.send('The puck is on on {}!'.format(self.table.puck.point))
+            await ctx.send('The puck is on {}!'.format(self.table.puck.point))
 
     @commands.command()
     async def players(self, ctx):
