@@ -72,6 +72,24 @@ class Hardways(Bet):
         elif self.table.dice.sum == 7:
             self.status = 'loss'
 
+class Field(Bet):
+    type = 'field'
+    def __init__(self, player, wager):
+        super().__init__(player, wager)
+
+    def check(self):
+        if self.table.dice.sum in [2, 12]:
+            self.winnings = self.wager * 3
+            self.status = 'win'
+
+        elif self.table.dice.sum in [3, 4, 9, 10, 11]:
+            self.winnings = self.wager
+            self.status = 'win'
+
+        elif self.table.dice.sum in [5, 6, 7, 8]:
+            self.winnings = 0
+            self.status = 'loss'
+
 def getBet(str):
     for bet in Bet.__subclasses__():
         if bet.type == str:
