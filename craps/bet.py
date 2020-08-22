@@ -45,7 +45,7 @@ class Odds(Bet):
             raise PlaceBetError('Cannot make odds bets when puck is off!')
         if [bet for bet in self.player.bets if bet.type == 'passline'] == []:
             raise PlaceBetError('Cannot make odds bet without pass bet!')
-        self.winnings = int(self.wager * (6 / (6-abs(self.table.puck.point - 7) )) - self.wager)
+        self.winnings = int(self.wager * (6 / (6-abs(self.table.puck.point - 7) )))
 
     def check(self):
         if self.table.dice.sum == self.table.puck.point:
