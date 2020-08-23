@@ -1,7 +1,7 @@
 import craps.config
 
 class Bet:
-    name = None
+    type = None
     def __init__(self, player, wager):
         self.player = player
         self.table = player.table
@@ -15,7 +15,7 @@ class Bet:
         return 'Bet({}, {}, ${})'.format(self.player.name, self.type, self.wager)
 
 
-class Passline(Bet):
+class Pass(Bet):
     type = 'pass'
     def __init__(self, player, wager):
         super().__init__(player, wager)
