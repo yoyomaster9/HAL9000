@@ -60,6 +60,7 @@ class Player:
             self.bets[b.type] = b
 
     def removeBet(self, betType):
+        self.bankroll += self.bets[betType].wager
         del self.bets[betType]
 
     def printBets(self):

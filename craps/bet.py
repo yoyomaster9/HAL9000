@@ -14,10 +14,6 @@ class Bet:
     def __repr__(self):
         return 'Bet({}, {}, ${})'.format(self.player.name, self.type, self.wager)
 
-    def __del__(self):
-        if self.status == None:
-            self.player.bankroll += self.wager
-
 
 class Pass(Bet):
     type = 'pass'

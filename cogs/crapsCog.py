@@ -109,7 +109,7 @@ class CrapsCog(commands.Cog):
     async def remove(self, ctx, *betTypes):
         self.update(ctx)
         for betType in betTypes:
-            del self.player.bets[betType.lower()]
+            self.player.removeBet(betType.lower())
         await ctx.send('Removed bets!')
         self.saveTables()
 
