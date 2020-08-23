@@ -16,7 +16,7 @@ class Bet:
 
 
 class Passline(Bet):
-    type = 'passline'
+    type = 'pass'
     def __init__(self, player, wager):
         super().__init__(player, wager)
         if self.table.puck.state == 'on':
