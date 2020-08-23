@@ -5,6 +5,7 @@ import craps.config
 import craps.bet
 import pickle, os
 import discord
+import craps.util
 
 
 class CrapsCog(commands.Cog):
@@ -90,21 +91,32 @@ class CrapsCog(commands.Cog):
         self.update(ctx)
         if len(args) % 2 != 0:
             raise Exception('Odd number of args!')
-        l = [(args[i], args[i+1]) for i in range(0, len(args), 2)]
-        for betType, wager in l:
+        l = [['Player', 'Bet', 'Wagered']]
+        allBets = [(args[i], args[i+1]) for i in range(0, len(args), 2)]
+        for betType, wager in allBets:
             try:
                 wager = int(wager)
                 self.player.placeBet(betType, wager)
-                await ctx.send('{} made a {} bet of ${}!'.format(self.player.name, betType, wager))
+                l.append([self.player.name, betType.title(), '$' + str(self.player.bets[betType].wager)])
             except craps.bet.PlaceBetError as e:
                 await ctx.send('Error! Bet cannot be placed.')
                 await ctx.send(e.message)
+        msg = 'Bets placed:\n```' + craps.util.col(l) + '\n```'
+        await ctx.send(msg)
+        self.saveTables()
+
+    @commands.command()
+    async def remove(self, ctx, *betTypes):
+        self.update(ctx)
+        for betType in betTypes:
+            del self.player.bets[betType.lower()]
+        await ctx.send('Removed bets!')
         self.saveTables()
 
     @commands.command()
     async def bets(self, ctx):
         self.update(ctx)
-        if self.table.bets == []:
+        if self.table.bets() == []:
             await ctx.send('There are no bets placed!')
         else:
             msg = '```\n' + self.table.printBets() + '\n```'
@@ -122,12 +134,12 @@ class CrapsCog(commands.Cog):
     async def players(self, ctx):
         self.update(ctx)
         if self.table.players != {}:
-            await ctx.send('Here are the current players!')
-            for name in self.table.players:
-                player = self.table.getPlayer(name)
-                await ctx.send('{}, Bankroll: ${:,}'.format(player, player.bankroll))
+            msg = 'Here are the current players!\n'
+            msg += '```\n' + self.table.printPlayers() + '\n```'
         else:
-            await ctx.send('No players have joined the table!')
+            msg = 'No players have joined the table!'
+
+        await ctx.send(msg)
 
     @commands.command()
     async def clearShooter(self, ctx):

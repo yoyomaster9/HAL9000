@@ -29,15 +29,19 @@ class Player:
     def __init__(self, name):
         self.name = name
         self.bankroll = 0
-        self.bets = []
+        self.bets = {}
 
     def __repr__(self):
-        return self.name
+        return 'Player({})'.format(self.name)
 
     def roll(self):
         self.table.roll(self)
 
     def placeBet(self, betType, wager):
+
+        wager = int(wager)
+        if wager <= 0:
+            raise Exception('Cannot place bets with negative amounts!')
 
         if self.bankroll < wager:
             raise bet.PlaceBetError('Bet too high! {}\'s bankroll is only ${}'.format(self.name, int(self.bankroll)))
@@ -50,11 +54,16 @@ class Player:
             b = bet.getBet(betType)(self, wager)
 
         self.bankroll -= wager
-        self.bets.append(b)
-        self.table.bets.append(b)
+        if b.type in self.bets:
+            self.bets[b.type].wager += b.wager
+        else:
+            self.bets[b.type] = b
+
+    def removeBet(self, betType):
+        del self.bets[betType]
 
     def printBets(self):
-        l = [[bet.player.name.title(), bet.type.title(), '$' + str(bet.wager)] for bet in self.bets]
+        l = [[self.name, bet.type.title(), '$' + str(bet.wager)] for bet in self.bets.values()]
         l.insert(0, ['Player', 'Bet', 'Amount'])
         return util.col(l)
 
@@ -66,7 +75,10 @@ class Table:
         self.minBet = config.MINBET
         self.shooter = None
         self.players = {} # will be dict of players name:player(name)
-        self.bets = []
+
+    def bets(self):
+        for player in self.players.values():
+            return [bet for bet in player.bets.values()]
 
     def getPlayer(self, name): # returns player if exists, creates new otherwise
         if name not in self.players:
@@ -75,12 +87,12 @@ class Table:
             return self.players[name]
 
     def addPlayer(self, name):
+        if name in self.players:
+            raise Exception('Player already exists!')
         self.players[name] = Player(name)
         self.players[name].table = self
 
     def removePlayer(self, name):
-        for bet in self.getPlayer(name).bets:
-            self.bets.remove(bet)
         if self.shooter == self.players[name]:
             self.shooter = None
         del self.players[name]
@@ -105,7 +117,7 @@ class Table:
             self.shooter = None
 
     def checkBets(self):
-        for bet in self.bets:
+        for bet in self.bets():
             bet.check()
             if bet.status == 'win':
                 bet.player.bankroll += bet.wager + bet.winnings
@@ -117,14 +129,13 @@ class Table:
             self.removeBet(bet)
 
     def removeBet(self, bet):
-        bet.player.bets.remove(bet)
-        self.bets.remove(bet)
+        del bet.player.bets[bet.type]
 
     def resetTable(self):
         self.__init__(self.channelID)
 
     def printBets(self):
-        l = [[bet.player.name, bet.type.title(), '$' + str(bet.wager)] for bet in self.bets]
+        l = [[bet.player.name, bet.type.title(), '$' + str(bet.wager)] for bet in self.bets()]
         l.insert(0, ['Player', 'Bet', 'Wagered'])
         return util.col(l)
 
@@ -138,6 +149,10 @@ class Table:
         l.insert(0, ['Player', 'Bet', 'Wagered'])
         return util.col(l)
 
+    def printPlayers(self):
+        l = [[player.name, '$' + str(player.bankroll)] for player in self.players.values()]
+        l.insert(0, ['Player', 'Bankroll'])
+        return util.col(l)
 
 
 
