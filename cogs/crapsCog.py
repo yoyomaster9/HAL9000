@@ -4,6 +4,8 @@ from craps import game
 import craps.config
 import craps.bet
 import pickle, os
+import discord
+
 
 class CrapsCog(commands.Cog):
     def __init__(self, bot):
@@ -140,3 +142,23 @@ class CrapsCog(commands.Cog):
         self.table.resetTable()
         await ctx.send('Resetting table!')
         self.saveTables()
+
+    @commands.Cog.listener()
+    async def on_raw_reaction_add(self, payload):
+        if payload.message_id != config.roleMenuID:
+            return
+
+        if payload.emoji.name == '\U0001F3B2':
+            r = discord.utils.get(payload.member.guild.roles, name = 'Craps')
+            await payload.member.add_roles(r)
+
+    @commands.Cog.listener()
+    async def on_raw_reaction_remove(self, payload):
+        if payload.message_id != config.roleMenuID:
+            return
+
+        if payload.emoji.name == '\U0001F3B2':
+            g = discord.utils.get(self.bot.guilds, id = payload.guild_id)
+            m = discord.utils.get(g.members, id = payload.user_id)
+            r = discord.utils.get(g.roles, name = 'Craps')
+            await m.remove_roles(r)
