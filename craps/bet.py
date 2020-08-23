@@ -20,7 +20,7 @@ class Pass(Bet):
     def __init__(self, player, wager):
         super().__init__(player, wager)
         if self.table.puck.state == 'on':
-            raise PlaceBetError('Cannot make Passline bet if Puck is already on!')
+            raise PlaceBetError('Cannot make Pass bet if Puck is already on!')
         self.winnings = self.wager
 
     def check(self):
