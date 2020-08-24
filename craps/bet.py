@@ -43,7 +43,7 @@ class Odds(Bet):
         super().__init__(player, wager)
         if self.table.puck.state == 'off':
             raise PlaceBetError('Cannot make odds bets when puck is off!')
-        if [bet for bet in self.player.bets if bet.type == 'passline'] == []:
+        if [bet for bet in self.player.bets if bet == 'pass'] == []:
             raise PlaceBetError('Cannot make odds bet without pass bet!')
         self.winnings = int(self.wager * (6 / (6-abs(self.table.puck.point - 7) )))
 
