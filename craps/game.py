@@ -78,7 +78,7 @@ class Table:
         self.players = {} # will be dict of players name:player(name)
 
     def bets(self):
-        return [bet for player in table.players.values() for bet in player.bets.values()]
+        return [bet for player in self.players.values() for bet in player.bets.values()]
 
     def getPlayer(self, name): # returns player if exists, creates new otherwise
         if name not in self.players:
