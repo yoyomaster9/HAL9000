@@ -1,7 +1,7 @@
 # HAL9000
 HAL9000 bot for Discord servers
 
-# Requirements
+## Requirements
 Anaconda / Miniconda
 
 Uses `Discord.py 1.7.3`
