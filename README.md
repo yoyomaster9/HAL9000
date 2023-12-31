@@ -2,8 +2,8 @@
 HAL9000 bot for Discord servers
 
 # Requirements
-Python 3.5 | 3.6 | 3.7 | 3.8
+Anaconda / Miniconda
 
-Discord.py
+Uses `Discord.py 1.7.3`
 
 Modify contents of `default_config.py` and rename to `config.py`

@@ -1,0 +1,8 @@
+name: discord-1.7.3
+channels:
+  - defaults
+dependencies:
+  - python=3.9
+  - pip
+  - pip:
+    - discord.py==1.7.3
