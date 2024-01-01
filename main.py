@@ -3,6 +3,11 @@ from discord.ext import commands
 import config
 import cogs
 import random
+import os
+import sys
+
+# Set working directory
+os.chdir(sys.path[0])
 
 bot = commands.Bot(command_prefix=config.BOT_PREFIX)
 for x in commands.Cog.__subclasses__():
